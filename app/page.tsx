@@ -85,6 +85,7 @@ const taxOptions: BillForm["taxMode"][] = ["None", "CST TIN", "GST TIN", "TXN NO
 const receiptDatabaseKey = "fuel-receipt-studio:history:v1";
 const receiptDatabaseVersion = 1 as const;
 const receiptHistoryLimit = 50;
+const sourceRepositoryUrl = "https://github.com/shantanu1258/samplefuelreceipt";
 
 const initialForm: BillForm = {
   stationName: "GREENWAY FUEL STATION",
@@ -1347,6 +1348,22 @@ export default function Home() {
           )}
         </section>
 
+        <section className="developer-strip" aria-labelledby="developer-heading">
+          <div>
+            <p className="section-number">PUBLIC REACT PROJECT</p>
+            <h2 id="developer-heading">See how the receipt builder works.</h2>
+          </div>
+          <div>
+            <p>
+              Explore a practical React and TypeScript implementation of browser-local JSON
+              storage, image uploads, live receipt rendering and print-to-PDF layouts.
+            </p>
+            <a href={sourceRepositoryUrl} target="_blank" rel="noreferrer">
+              Browse the JavaScript source <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
         <section className="trust-strip" aria-label="Privacy information">
           <div>
             <span className="trust-number">100%</span>
@@ -1361,7 +1378,7 @@ export default function Home() {
 
       <footer className="site-footer">
         <span>Fuel Receipt Studio</span>
-        <p>Made for quick, professional expense records.</p>
+        <p>Public React project for quick, professional expense records.</p>
         <a href="#top">Back to top ↑</a>
       </footer>
     </div>

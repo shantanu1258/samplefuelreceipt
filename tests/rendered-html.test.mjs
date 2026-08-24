@@ -41,6 +41,9 @@ test("server-renders the fuel receipt studio", async () => {
   assert.match(html, /Print \/ Save PDF/);
   assert.match(html, /Save bill/);
   assert.match(html, /Saved receipts/);
+  assert.match(html, /PUBLIC REACT PROJECT/);
+  assert.match(html, /Browse the JavaScript source/);
+  assert.match(html, /github\.com\/shantanu1258\/samplefuelreceipt/);
   assert.match(html, /Loading browser history/);
   assert.match(html, /JSON snapshot/);
   assert.match(html, /Generated fuel receipt preview/);
@@ -118,8 +121,11 @@ test("removes disposable starter assets and metadata", async () => {
   assert.doesNotMatch(layout, /next\/headers|headers\(\)/);
   assert.match(nextConfig, /output: "export"/);
   assert.match(nextConfig, /basePath/);
+  assert.match(nextConfig, /GITHUB_PAGES_CUSTOM_DOMAIN/);
   assert.match(packageJson, /build:pages/);
+  assert.match(packageJson, /"name": "samplefuelreceipt"/);
   assert.match(pagesWorkflow, /actions\/deploy-pages@v4/);
+  assert.match(pagesWorkflow, /GITHUB_PAGES_CUSTOM_DOMAIN: samplefuelreceipt\.js\.org/);
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.doesNotMatch(layout, /Starter Project|codex-preview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton|site-creator-vinext-starter/);

@@ -4,6 +4,9 @@ import "./globals.css";
 function resolveSiteUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
 
+  const customDomain = process.env.GITHUB_PAGES_CUSTOM_DOMAIN?.trim();
+  if (customDomain) return `https://${customDomain}`;
+
   const [owner = "", repositoryName = ""] = process.env.GITHUB_REPOSITORY?.split("/") ?? [];
   if (process.env.GITHUB_PAGES === "true" && owner && repositoryName) {
     const repositoryPath = repositoryName.endsWith(".github.io") ? "" : `/${repositoryName}`;

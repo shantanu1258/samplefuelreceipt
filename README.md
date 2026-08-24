@@ -37,9 +37,9 @@ npm run build
 npm test
 ```
 
-The application uses React 19, Next-compatible routing through vinext, and a
-Cloudflare Worker-compatible build. No database, account, or external service is
-required.
+The application is a public React 19 and TypeScript reference project. It uses
+Next-compatible routing through vinext and also produces a static GitHub Pages
+export. No database, account, or external service is required.
 
 ## GitHub Pages
 
@@ -51,3 +51,10 @@ selected automatically.
 Browser history is specific to each browser, device, and website origin. It does
 not sync between devices, and history created on `localhost` will not transfer
 automatically to the public GitHub Pages address.
+
+## Custom domain
+
+The Pages export is configured for the requested `samplefuelreceipt.js.org`
+custom domain. JS.ORG registrations are reviewed by the JS.ORG maintainers, so
+the domain becomes active only after their registration pull request is merged
+and DNS has propagated.

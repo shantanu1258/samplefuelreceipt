@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputDirectory = path.join(projectRoot, "out");
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+const customDomain = process.env.GITHUB_PAGES_CUSTOM_DOMAIN?.trim() ?? "";
 const isUserSite = repositoryName.endsWith(".github.io");
-const basePath = repositoryName && !isUserSite ? `/${repositoryName}` : "";
+const basePath = repositoryName && !isUserSite && !customDomain ? `/${repositoryName}` : "";
 const publicFonts = [
   "press-start-2p-latin.woff2",
   "nunito-sans-latin.woff2",
