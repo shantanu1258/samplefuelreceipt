@@ -374,6 +374,7 @@ export default function Home() {
   const [logoError, setLogoError] = useState("");
   const [failedLogoSource, setFailedLogoSource] = useState("");
   const [logoStatus, setLogoStatus] = useState<"empty" | "loading" | "ready">("empty");
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const logoReaderRef = useRef<FileReader | null>(null);
 
@@ -590,23 +591,107 @@ export default function Home() {
     return "failed" as const;
   }
 
-  function exportReceipt(event?: FormEvent) {
-    event?.preventDefault();
+  function canCreateReceiptFile() {
     if (!canExport) {
       setMessage("Add the station, bill number, rate and amount first");
-      return;
+      return false;
     }
     if (visibleLogoSource && logoStatus === "loading") {
       setMessage("Wait a moment for the logo to finish loading");
-      return;
+      return false;
     }
-    const historyResult = saveCurrentReceipt("Saved to history · opening print preview…");
+    return true;
+  }
+
+  function printReceipt() {
+    if (!canCreateReceiptFile()) return;
+
+    const historyResult = saveCurrentReceipt("Saved to history · opening print dialog…");
     if (historyResult === "failed") {
-      setMessage("Opening print preview; browser history could not be saved");
+      setMessage("Opening print dialog; browser history could not be saved");
     } else if (historyResult === "saved-without-logo") {
-      setMessage("Saved without the uploaded logo · opening print preview…");
+      setMessage("Saved without the uploaded logo · opening print dialog…");
     }
     window.print();
+  }
+
+  async function downloadReceiptPdf(event?: FormEvent) {
+    event?.preventDefault();
+    if (!canCreateReceiptFile() || isDownloadingPdf) return;
+
+    const receipt = document.getElementById("receipt");
+    if (!receipt) {
+      setMessage("Receipt preview is unavailable; refresh and try again");
+      return;
+    }
+
+    setIsDownloadingPdf(true);
+    setMessage("Creating a tightly cropped receipt PDF…");
+
+    try {
+      await document.fonts?.ready;
+      const [{ toPng }, { jsPDF }] = await Promise.all([
+        import("html-to-image"),
+        import("jspdf"),
+      ]);
+      const bounds = receipt.getBoundingClientRect();
+      const receiptWidth = Math.ceil(Math.max(bounds.width, receipt.scrollWidth));
+      const receiptHeight = Math.ceil(Math.max(bounds.height, receipt.scrollHeight));
+
+      if (!receiptWidth || !receiptHeight) {
+        throw new Error("Receipt has no visible dimensions");
+      }
+
+      const receiptPng = await toPng(receipt, {
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+        pixelRatio: 2,
+        width: receiptWidth,
+        height: receiptHeight,
+        style: {
+          margin: "0",
+          transform: "none",
+        },
+      });
+      const pixelsToPoints = 72 / 96;
+      const pageWidth = receiptWidth * pixelsToPoints;
+      const pageHeight = receiptHeight * pixelsToPoints;
+      const pdf = new jsPDF({
+        orientation: pageWidth > pageHeight ? "landscape" : "portrait",
+        unit: "pt",
+        format: [pageWidth, pageHeight],
+        compress: true,
+      });
+      pdf.setProperties({
+        title: `Fuel receipt ${form.invoiceNumber}`,
+        subject: `${form.stationName} fuel receipt`,
+        creator: "Fuel Receipt Studio",
+      });
+      pdf.addImage(receiptPng, "PNG", 0, 0, pageWidth, pageHeight, undefined, "FAST");
+
+      const safeReceiptNumber = form.invoiceNumber
+        .trim()
+        .replace(/[^a-z0-9_-]+/gi, "-")
+        .replace(/^-+|-+$/g, "") || "receipt";
+      pdf.save(`fuel-receipt-${safeReceiptNumber}.pdf`);
+
+      const historyResult = saveCurrentReceipt();
+      if (historyResult === "failed") {
+        setMessage("Receipt PDF downloaded; browser history could not be saved");
+      } else if (historyResult === "saved-without-logo") {
+        setMessage("Receipt PDF downloaded; history saved without the uploaded logo");
+      } else {
+        setMessage("Tightly cropped receipt PDF downloaded");
+      }
+    } catch {
+      setMessage(
+        remoteLogo && !uploadedLogo
+          ? "PDF could not use that logo URL. Upload the logo file and try again."
+          : "Receipt PDF could not be created. Please try again.",
+      );
+    } finally {
+      setIsDownloadingPdf(false);
+    }
   }
 
   async function copySummary() {
@@ -769,7 +854,7 @@ export default function Home() {
         </section>
 
         <section className="workspace" id="generator" aria-label="Fuel bill generator">
-          <form className="editor-panel panel" onSubmit={exportReceipt}>
+          <form className="editor-panel panel" onSubmit={downloadReceiptPdf}>
             <div className="panel-heading">
               <div>
                 <p className="section-number">01 / DETAILS</p>
@@ -1179,8 +1264,12 @@ export default function Home() {
               <button className="button button-dark" type="button" onClick={() => saveCurrentReceipt()}>
                 Save bill
               </button>
-              <button className="button button-accent" type="submit">
-                Print / Save PDF <span aria-hidden="true">↗</span>
+              <button className="button button-dark" type="button" onClick={printReceipt}>
+                Print receipt
+              </button>
+              <button className="button button-accent" type="submit" disabled={isDownloadingPdf}>
+                {isDownloadingPdf ? "Creating PDF…" : "Download receipt PDF"}
+                {!isDownloadingPdf && <span aria-hidden="true">↓</span>}
               </button>
             </div>
             <p className={`form-status ${canExport ? "ready" : "needs-input"}`} role="status">
@@ -1283,8 +1372,8 @@ export default function Home() {
               <p className="section-number">03 / HISTORY</p>
               <h2 id="history-heading">Saved receipts</h2>
               <p>
-                Printing or using Save bill adds a JSON snapshot to this browser. Clone one to
-                reuse its details.
+                Printing, downloading or using Save bill adds a JSON snapshot to this browser.
+                Clone one to reuse its details.
               </p>
             </div>
             <div className="history-heading-actions">
@@ -1371,7 +1460,7 @@ export default function Home() {
           </div>
           <div>
             <span className="trust-mark" aria-hidden="true"><i /></span>
-            <p><b>Built for real work.</b> Responsive layouts and clean A4 print output included.</p>
+            <p><b>Built for real work.</b> Responsive layouts and receipt-sized PDF downloads included.</p>
           </div>
         </section>
       </main>

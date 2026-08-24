@@ -38,7 +38,8 @@ test("server-renders the fuel receipt studio", async () => {
   assert.match(html, /Live Preview/);
   assert.match(html, /Preview Only/);
   assert.match(html, /Template 5/);
-  assert.match(html, /Print \/ Save PDF/);
+  assert.match(html, /Download receipt PDF/);
+  assert.match(html, /Print receipt/);
   assert.match(html, /Save bill/);
   assert.match(html, /Saved receipts/);
   assert.match(html, /PUBLIC REACT PROJECT/);
@@ -97,7 +98,13 @@ test("removes disposable starter assets and metadata", async () => {
   ]);
 
   assert.match(page, /^"use client";/);
+  assert.match(page, /function printReceipt\(\)/);
   assert.match(page, /window\.print\(\)/);
+  assert.match(page, /function downloadReceiptPdf/);
+  assert.match(page, /import\("html-to-image"\)/);
+  assert.match(page, /import\("jspdf"\)/);
+  assert.match(page, /format: \[pageWidth, pageHeight\]/);
+  assert.match(page, /Download receipt PDF/);
   assert.match(page, /window\.localStorage\.setItem/);
   assert.match(page, /fuel-receipt-studio:history:v1/);
   assert.match(page, /type ReceiptDatabase/);

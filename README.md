@@ -12,7 +12,8 @@ layouts, local receipt history, cloning, and browser-based PDF printing.
 - optional GSTIN, CST TIN, or transaction number
 - five formal and thermal receipt layouts
 - copyable plain-text summary
-- print-only receipt layout for saving as PDF
+- tightly cropped PDF downloads sized to the receipt instead of A4 paper
+- a separate browser print option for physical printing
 - versioned JSON history in browser storage, with clone and delete controls
 - automatic history save when printing and a manual Save bill action
 - local-only data; receipt history is never uploaded

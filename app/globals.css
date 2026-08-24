@@ -791,7 +791,7 @@ a {
 
 .form-actions {
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto 1fr;
   gap: 10px;
   padding: 27px 32px 15px;
 }
@@ -812,6 +812,12 @@ a {
 
 .button:hover {
   transform: translateY(-1px);
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+  transform: none;
 }
 
 .button:focus-visible {
@@ -2210,13 +2216,14 @@ a {
 }
 
 @page {
-  size: A4 portrait;
-  margin: 12mm;
+  size: auto;
+  margin: 0;
 }
 
 @media print {
   body {
     background: white;
+    min-width: 0;
   }
 
   .topbar,
