@@ -1467,7 +1467,10 @@ export default function Home() {
 
       <footer className="site-footer">
         <span>Fuel Receipt Studio</span>
-        <p>Public React project for quick, professional expense records.</p>
+        <p className="site-disclaimer" role="note">
+          <b>Disclaimer:</b> Fuel Receipt Studio is provided for educational purposes only. Do not
+          use it to create fraudulent or misleading documents.
+        </p>
         <a href="#top">Back to top ↑</a>
       </footer>
     </div>

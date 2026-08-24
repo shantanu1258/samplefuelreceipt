@@ -44,6 +44,8 @@ test("server-renders the fuel receipt studio", async () => {
   assert.match(html, /Saved receipts/);
   assert.match(html, /PUBLIC REACT PROJECT/);
   assert.match(html, /Browse the JavaScript source/);
+  assert.match(html, /Fuel Receipt Studio is provided for educational purposes only/);
+  assert.match(html, /Do not use it to create fraudulent or misleading documents/);
   assert.match(html, /github\.com\/shantanu1258\/fuel-receipt-studio/);
   assert.match(html, /Loading browser history/);
   assert.match(html, /JSON snapshot/);

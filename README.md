@@ -4,6 +4,9 @@ A responsive React fuel-bill generator rebuilt from the supplied saved webpage.
 It creates petrol, diesel, CNG, and EV charging receipts with five live-preview
 layouts, local receipt history, cloning, and browser-based PDF printing.
 
+> **Disclaimer:** Fuel Receipt Studio is provided for educational purposes only.
+> Do not use it to create fraudulent or misleading documents.
+
 ## Features
 
 - live receipt preview while editing

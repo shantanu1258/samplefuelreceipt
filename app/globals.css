@@ -1937,6 +1937,16 @@ a {
   margin: 0;
 }
 
+.site-disclaimer {
+  max-width: 620px;
+  text-align: center;
+  line-height: 1.55;
+}
+
+.site-disclaimer b {
+  color: var(--paper);
+}
+
 .site-footer a {
   justify-self: end;
   color: var(--amber);
@@ -2197,8 +2207,10 @@ a {
     grid-template-columns: 1fr auto;
   }
 
-  .site-footer p {
-    display: none;
+  .site-disclaimer {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
   }
 }
 
