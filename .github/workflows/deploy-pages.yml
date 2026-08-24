@@ -14,9 +14,6 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
-env:
-  GITHUB_PAGES_CUSTOM_DOMAIN: samplefuelreceipt.js.org
-
 jobs:
   build:
     runs-on: ubuntu-latest

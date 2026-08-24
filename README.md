@@ -53,9 +53,7 @@ Browser history is specific to each browser, device, and website origin. It does
 not sync between devices, and history created on `localhost` will not transfer
 automatically to the public GitHub Pages address.
 
-## Custom domain
+## Live site
 
-The Pages export is configured for the requested `samplefuelreceipt.js.org`
-custom domain. JS.ORG registrations are reviewed by the JS.ORG maintainers, so
-the domain becomes active only after their registration pull request is merged
-and DNS has propagated.
+The public app is available at
+[https://shantanu1258.github.io/fuel-receipt-studio/](https://shantanu1258.github.io/fuel-receipt-studio/).

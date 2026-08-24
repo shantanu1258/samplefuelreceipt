@@ -85,7 +85,7 @@ const taxOptions: BillForm["taxMode"][] = ["None", "CST TIN", "GST TIN", "TXN NO
 const receiptDatabaseKey = "fuel-receipt-studio:history:v1";
 const receiptDatabaseVersion = 1 as const;
 const receiptHistoryLimit = 50;
-const sourceRepositoryUrl = "https://github.com/shantanu1258/samplefuelreceipt";
+const sourceRepositoryUrl = "https://github.com/shantanu1258/fuel-receipt-studio";
 
 const initialForm: BillForm = {
   stationName: "GREENWAY FUEL STATION",
